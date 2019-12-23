@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Services;
 using IntegracionWebService.localhost;
+using log4net;
 
 namespace IntegracionWebService
 {
@@ -20,6 +21,7 @@ namespace IntegracionWebService
     public class WebService : System.Web.Services.WebService
     {
         private readonly CoreServices core = new CoreServices();
+        private readonly ILog logger = LogManager.GetLogger(System.Environment.MachineName);
 
         [WebMethod]
         public Cuenta ObtenerCuenta(int numeroCuenta)
@@ -32,7 +34,9 @@ namespace IntegracionWebService
         {
             if (tipoTransaccion == TipoTransaccion.Interbancaria)
             {
+                //El monto aqui debe ser negatio ya que estamos retirando del balance de la cuenta
                 core.ActualizarCuenta(numeroCuentaRetiro, -monto, localhost.TipoTransaccion.Transaccion);
+                
                 core.ActualizarCuenta(numeroCuentaDeposito, monto, localhost.TipoTransaccion.Transaccion);
             }
         }
@@ -64,10 +68,5 @@ namespace IntegracionWebService
             return core.ObtenerCajero(usuario, contraseña);
         }
 
-        [WebMethod]
-        public Transaccion[] ObtenerTodasTransacciones(int numeroCuenta)
-        {
-            return core.ObtenerTodasTransacciones(numeroCuenta);
-        }
     }
 }

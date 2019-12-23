@@ -43,8 +43,6 @@ namespace IntegracionWebService.localhost {
         
         private System.Threading.SendOrPostCallback ObtenerTodosPrestamosOperationCompleted;
         
-        private System.Threading.SendOrPostCallback ObtenerTodasTransaccionesOperationCompleted;
-        
         private bool useDefaultCredentialsSetExplicitly;
         
         /// <remarks/>
@@ -103,9 +101,6 @@ namespace IntegracionWebService.localhost {
         
         /// <remarks/>
         public event ObtenerTodosPrestamosCompletedEventHandler ObtenerTodosPrestamosCompleted;
-        
-        /// <remarks/>
-        public event ObtenerTodasTransaccionesCompletedEventHandler ObtenerTodasTransaccionesCompleted;
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://intec.edu.do/ActualizarCuenta", RequestNamespace="http://intec.edu.do", ResponseNamespace="http://intec.edu.do", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
@@ -323,35 +318,6 @@ namespace IntegracionWebService.localhost {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://intec.edu.do/ObtenerTodasTransacciones", RequestNamespace="http://intec.edu.do", ResponseNamespace="http://intec.edu.do", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public Transaccion[] ObtenerTodasTransacciones(int numeroCuenta) {
-            object[] results = this.Invoke("ObtenerTodasTransacciones", new object[] {
-                        numeroCuenta});
-            return ((Transaccion[])(results[0]));
-        }
-        
-        /// <remarks/>
-        public void ObtenerTodasTransaccionesAsync(int numeroCuenta) {
-            this.ObtenerTodasTransaccionesAsync(numeroCuenta, null);
-        }
-        
-        /// <remarks/>
-        public void ObtenerTodasTransaccionesAsync(int numeroCuenta, object userState) {
-            if ((this.ObtenerTodasTransaccionesOperationCompleted == null)) {
-                this.ObtenerTodasTransaccionesOperationCompleted = new System.Threading.SendOrPostCallback(this.OnObtenerTodasTransaccionesOperationCompleted);
-            }
-            this.InvokeAsync("ObtenerTodasTransacciones", new object[] {
-                        numeroCuenta}, this.ObtenerTodasTransaccionesOperationCompleted, userState);
-        }
-        
-        private void OnObtenerTodasTransaccionesOperationCompleted(object arg) {
-            if ((this.ObtenerTodasTransaccionesCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-                this.ObtenerTodasTransaccionesCompleted(this, new ObtenerTodasTransaccionesCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-            }
-        }
-        
-        /// <remarks/>
         public new void CancelAsync(object userState) {
             base.CancelAsync(userState);
         }
@@ -396,7 +362,7 @@ namespace IntegracionWebService.localhost {
         
         private int numeroCuentaField;
         
-        private int clienteIdField;
+        private string clienteCedulaField;
         
         private decimal balanceDisponibleField;
         
@@ -405,6 +371,8 @@ namespace IntegracionWebService.localhost {
         private string apellidosField;
         
         private Prestamo[] prestamosField;
+        
+        private Transaccion[] transaccionesField;
         
         /// <remarks/>
         public int numeroCuenta {
@@ -417,12 +385,12 @@ namespace IntegracionWebService.localhost {
         }
         
         /// <remarks/>
-        public int clienteId {
+        public string clienteCedula {
             get {
-                return this.clienteIdField;
+                return this.clienteCedulaField;
             }
             set {
-                this.clienteIdField = value;
+                this.clienteCedulaField = value;
             }
         }
         
@@ -463,6 +431,16 @@ namespace IntegracionWebService.localhost {
             }
             set {
                 this.prestamosField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public Transaccion[] transacciones {
+            get {
+                return this.transaccionesField;
+            }
+            set {
+                this.transaccionesField = value;
             }
         }
     }
@@ -508,51 +486,6 @@ namespace IntegracionWebService.localhost {
             }
             set {
                 this.montoPendientePorPagarField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.3752.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://intec.edu.do")]
-    public partial class Transaccion {
-        
-        private int idField;
-        
-        private string tipoTransaccionField;
-        
-        private System.DateTime fechaField;
-        
-        /// <remarks/>
-        public int id {
-            get {
-                return this.idField;
-            }
-            set {
-                this.idField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string tipoTransaccion {
-            get {
-                return this.tipoTransaccionField;
-            }
-            set {
-                this.tipoTransaccionField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public System.DateTime fecha {
-            get {
-                return this.fechaField;
-            }
-            set {
-                this.fechaField = value;
             }
         }
     }
@@ -610,6 +543,51 @@ namespace IntegracionWebService.localhost {
             }
             set {
                 this.nombresField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.3752.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://intec.edu.do")]
+    public partial class Transaccion {
+        
+        private int idField;
+        
+        private string tipoTransaccionField;
+        
+        private System.DateTime fechaField;
+        
+        /// <remarks/>
+        public int id {
+            get {
+                return this.idField;
+            }
+            set {
+                this.idField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string tipoTransaccion {
+            get {
+                return this.tipoTransaccionField;
+            }
+            set {
+                this.tipoTransaccionField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public System.DateTime fecha {
+            get {
+                return this.fechaField;
+            }
+            set {
+                this.fechaField = value;
             }
         }
     }
@@ -704,32 +682,6 @@ namespace IntegracionWebService.localhost {
             get {
                 this.RaiseExceptionIfNecessary();
                 return ((Prestamo[])(this.results[0]));
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
-    public delegate void ObtenerTodasTransaccionesCompletedEventHandler(object sender, ObtenerTodasTransaccionesCompletedEventArgs e);
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class ObtenerTodasTransaccionesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
-        private object[] results;
-        
-        internal ObtenerTodasTransaccionesCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
-            this.results = results;
-        }
-        
-        /// <remarks/>
-        public Transaccion[] Result {
-            get {
-                this.RaiseExceptionIfNecessary();
-                return ((Transaccion[])(this.results[0]));
             }
         }
     }
