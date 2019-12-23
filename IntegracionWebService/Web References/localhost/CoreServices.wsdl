@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://intec.edu.do" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://intec.edu.do" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://intec.edu.do">
+      <s:element name="ActualizarCuenta">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="numeroCuenta" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="montoPorAñadir" type="s:decimal" />
+            <s:element minOccurs="1" maxOccurs="1" name="tipoTransaccion" type="tns:TipoTransaccion" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:simpleType name="TipoTransaccion">
+        <s:restriction base="s:string">
+          <s:enumeration value="Deposito" />
+          <s:enumeration value="Retiro" />
+          <s:enumeration value="Transaccion" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="ActualizarCuentaResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="ObtenerCuenta">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="numeroCuenta" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ObtenerCuentaResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ObtenerCuentaResult" type="tns:Cuenta" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="Cuenta">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="numeroCuenta" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="clienteId" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="balanceDisponible" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="nombres" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="apellidos" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="prestamos" type="tns:ArrayOfPrestamo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfPrestamo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Prestamo" nillable="true" type="tns:Prestamo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Prestamo">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="id" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="numeroCuenta" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="montoPendientePorPagar" type="s:decimal" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="InsertarCajero">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="nombres" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="contraseña" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="InsertarCajeroResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="ObtenerCajero">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="contraseña" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ObtenerCajeroResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ObtenerCajeroResult" type="tns:Cajero" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="Cajero">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="id" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="contraseña" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="nombres" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="InsertarPrestamo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="numeroCuenta" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="montoPrestamo" type="s:decimal" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="InsertarPrestamoResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="ActulizarPrestamo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="idPrestamo" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="cantidadPrestamo" type="s:decimal" />
+            <s:element minOccurs="1" maxOccurs="1" name="montoAPagar" type="s:decimal" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ActulizarPrestamoResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="ObtenerTodosPrestamos">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="numeroCuenta" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ObtenerTodosPrestamosResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ObtenerTodosPrestamosResult" type="tns:ArrayOfPrestamo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ObtenerTodasTransacciones">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="numeroCuenta" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ObtenerTodasTransaccionesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ObtenerTodasTransaccionesResult" type="tns:ArrayOfTransaccion" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfTransaccion">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Transaccion" nillable="true" type="tns:Transaccion" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Transaccion">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="id" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="tipoTransaccion" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="fecha" type="s:dateTime" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="ActualizarCuentaSoapIn">
+    <wsdl:part name="parameters" element="tns:ActualizarCuenta" />
+  </wsdl:message>
+  <wsdl:message name="ActualizarCuentaSoapOut">
+    <wsdl:part name="parameters" element="tns:ActualizarCuentaResponse" />
+  </wsdl:message>
+  <wsdl:message name="ObtenerCuentaSoapIn">
+    <wsdl:part name="parameters" element="tns:ObtenerCuenta" />
+  </wsdl:message>
+  <wsdl:message name="ObtenerCuentaSoapOut">
+    <wsdl:part name="parameters" element="tns:ObtenerCuentaResponse" />
+  </wsdl:message>
+  <wsdl:message name="InsertarCajeroSoapIn">
+    <wsdl:part name="parameters" element="tns:InsertarCajero" />
+  </wsdl:message>
+  <wsdl:message name="InsertarCajeroSoapOut">
+    <wsdl:part name="parameters" element="tns:InsertarCajeroResponse" />
+  </wsdl:message>
+  <wsdl:message name="ObtenerCajeroSoapIn">
+    <wsdl:part name="parameters" element="tns:ObtenerCajero" />
+  </wsdl:message>
+  <wsdl:message name="ObtenerCajeroSoapOut">
+    <wsdl:part name="parameters" element="tns:ObtenerCajeroResponse" />
+  </wsdl:message>
+  <wsdl:message name="InsertarPrestamoSoapIn">
+    <wsdl:part name="parameters" element="tns:InsertarPrestamo" />
+  </wsdl:message>
+  <wsdl:message name="InsertarPrestamoSoapOut">
+    <wsdl:part name="parameters" element="tns:InsertarPrestamoResponse" />
+  </wsdl:message>
+  <wsdl:message name="ActulizarPrestamoSoapIn">
+    <wsdl:part name="parameters" element="tns:ActulizarPrestamo" />
+  </wsdl:message>
+  <wsdl:message name="ActulizarPrestamoSoapOut">
+    <wsdl:part name="parameters" element="tns:ActulizarPrestamoResponse" />
+  </wsdl:message>
+  <wsdl:message name="ObtenerTodosPrestamosSoapIn">
+    <wsdl:part name="parameters" element="tns:ObtenerTodosPrestamos" />
+  </wsdl:message>
+  <wsdl:message name="ObtenerTodosPrestamosSoapOut">
+    <wsdl:part name="parameters" element="tns:ObtenerTodosPrestamosResponse" />
+  </wsdl:message>
+  <wsdl:message name="ObtenerTodasTransaccionesSoapIn">
+    <wsdl:part name="parameters" element="tns:ObtenerTodasTransacciones" />
+  </wsdl:message>
+  <wsdl:message name="ObtenerTodasTransaccionesSoapOut">
+    <wsdl:part name="parameters" element="tns:ObtenerTodasTransaccionesResponse" />
+  </wsdl:message>
+  <wsdl:portType name="CoreServicesSoap">
+    <wsdl:operation name="ActualizarCuenta">
+      <wsdl:input message="tns:ActualizarCuentaSoapIn" />
+      <wsdl:output message="tns:ActualizarCuentaSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerCuenta">
+      <wsdl:input message="tns:ObtenerCuentaSoapIn" />
+      <wsdl:output message="tns:ObtenerCuentaSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="InsertarCajero">
+      <wsdl:input message="tns:InsertarCajeroSoapIn" />
+      <wsdl:output message="tns:InsertarCajeroSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerCajero">
+      <wsdl:input message="tns:ObtenerCajeroSoapIn" />
+      <wsdl:output message="tns:ObtenerCajeroSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="InsertarPrestamo">
+      <wsdl:input message="tns:InsertarPrestamoSoapIn" />
+      <wsdl:output message="tns:InsertarPrestamoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ActulizarPrestamo">
+      <wsdl:input message="tns:ActulizarPrestamoSoapIn" />
+      <wsdl:output message="tns:ActulizarPrestamoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerTodosPrestamos">
+      <wsdl:input message="tns:ObtenerTodosPrestamosSoapIn" />
+      <wsdl:output message="tns:ObtenerTodosPrestamosSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerTodasTransacciones">
+      <wsdl:input message="tns:ObtenerTodasTransaccionesSoapIn" />
+      <wsdl:output message="tns:ObtenerTodasTransaccionesSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CoreServicesSoap" type="tns:CoreServicesSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ActualizarCuenta">
+      <soap:operation soapAction="http://intec.edu.do/ActualizarCuenta" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerCuenta">
+      <soap:operation soapAction="http://intec.edu.do/ObtenerCuenta" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertarCajero">
+      <soap:operation soapAction="http://intec.edu.do/InsertarCajero" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerCajero">
+      <soap:operation soapAction="http://intec.edu.do/ObtenerCajero" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertarPrestamo">
+      <soap:operation soapAction="http://intec.edu.do/InsertarPrestamo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ActulizarPrestamo">
+      <soap:operation soapAction="http://intec.edu.do/ActulizarPrestamo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerTodosPrestamos">
+      <soap:operation soapAction="http://intec.edu.do/ObtenerTodosPrestamos" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerTodasTransacciones">
+      <soap:operation soapAction="http://intec.edu.do/ObtenerTodasTransacciones" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="CoreServicesSoap12" type="tns:CoreServicesSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ActualizarCuenta">
+      <soap12:operation soapAction="http://intec.edu.do/ActualizarCuenta" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerCuenta">
+      <soap12:operation soapAction="http://intec.edu.do/ObtenerCuenta" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertarCajero">
+      <soap12:operation soapAction="http://intec.edu.do/InsertarCajero" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerCajero">
+      <soap12:operation soapAction="http://intec.edu.do/ObtenerCajero" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertarPrestamo">
+      <soap12:operation soapAction="http://intec.edu.do/InsertarPrestamo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ActulizarPrestamo">
+      <soap12:operation soapAction="http://intec.edu.do/ActulizarPrestamo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerTodosPrestamos">
+      <soap12:operation soapAction="http://intec.edu.do/ObtenerTodosPrestamos" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerTodasTransacciones">
+      <soap12:operation soapAction="http://intec.edu.do/ObtenerTodasTransacciones" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CoreServices">
+    <wsdl:port name="CoreServicesSoap" binding="tns:CoreServicesSoap">
+      <soap:address location="http://localhost:63610/CoreServices.asmx" />
+    </wsdl:port>
+    <wsdl:port name="CoreServicesSoap12" binding="tns:CoreServicesSoap12">
+      <soap12:address location="http://localhost:63610/CoreServices.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
