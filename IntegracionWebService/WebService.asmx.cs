@@ -85,5 +85,14 @@ namespace IntegracionWebService
             return core.ObtenerCajero(usuario, contraseña);
         }
 
+        /// <summary>
+        /// Paga un monto especifico de un prestamo existente
+        /// </summary>
+        [WebMethod]
+        public void PagarPrestamo(Prestamo prestamo, decimal montoAPagar)
+        {
+            core.ActulizarPrestamo(prestamo.id, prestamo.montoPendientePorPagar, montoAPagar);
+        }
+
     }
 }
