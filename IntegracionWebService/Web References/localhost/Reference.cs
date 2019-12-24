@@ -557,7 +557,11 @@ namespace IntegracionWebService.localhost {
         
         private int idField;
         
+        private int numeroCuentaField;
+        
         private string tipoTransaccionField;
+        
+        private decimal montoField;
         
         private System.DateTime fechaField;
         
@@ -572,12 +576,32 @@ namespace IntegracionWebService.localhost {
         }
         
         /// <remarks/>
+        public int numeroCuenta {
+            get {
+                return this.numeroCuentaField;
+            }
+            set {
+                this.numeroCuentaField = value;
+            }
+        }
+        
+        /// <remarks/>
         public string tipoTransaccion {
             get {
                 return this.tipoTransaccionField;
             }
             set {
                 this.tipoTransaccionField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public decimal monto {
+            get {
+                return this.montoField;
+            }
+            set {
+                this.montoField = value;
             }
         }
         
