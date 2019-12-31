@@ -56,6 +56,7 @@ namespace IntegracionWebService
         {
             cuenta.balanceDisponible += monto;
             core.ActualizarCuenta(cuenta.numeroCuenta, cuenta.balanceDisponible, localhost.TipoTransaccion.Deposito);
+            cuenta.transacciones = core.ObtenerTodasTransacciones(cuenta.numeroCuenta);
             return cuenta;
         }
 
@@ -70,6 +71,7 @@ namespace IntegracionWebService
             {
                 cuenta.balanceDisponible -= monto;
                 core.ActualizarCuenta(cuenta.numeroCuenta, cuenta.balanceDisponible, localhost.TipoTransaccion.Retiro);
+                cuenta.transacciones = core.ObtenerTodasTransacciones(cuenta.numeroCuenta);
                 return cuenta;
             }
             else
@@ -89,9 +91,18 @@ namespace IntegracionWebService
         /// Paga un monto especifico de un prestamo existente
         /// </summary>
         [WebMethod]
-        public void PagarPrestamo(Prestamo prestamo, decimal montoAPagar)
+        public Cuenta PagarPrestamo(Cuenta cuenta, Prestamo prestamo, decimal montoAPagar)
         {
-            core.ActulizarPrestamo(prestamo.id, prestamo.montoPendientePorPagar, montoAPagar);
+            return core.ActulizarPrestamo(cuenta, prestamo.id, prestamo.montoPendientePorPagar, montoAPagar);
+        }
+
+        /// <summary>
+        /// Retorna todas las trancciones ocurridas en una fecha especifica sin tener en cuenta la hora
+        /// </summary>
+        [WebMethod]
+        public Transaccion[] ObtenerTodasTransaccionesDelDia(DateTime fecha)
+        {
+            return core.ObtenerTodasTransaccionesDia(fecha);
         }
 
     }

@@ -121,6 +121,7 @@
       <s:element name="ActulizarPrestamo">
         <s:complexType>
           <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="cuenta" type="tns:Cuenta" />
             <s:element minOccurs="1" maxOccurs="1" name="idPrestamo" type="s:int" />
             <s:element minOccurs="1" maxOccurs="1" name="cantidadPrestamo" type="s:decimal" />
             <s:element minOccurs="1" maxOccurs="1" name="montoAPagar" type="s:decimal" />
@@ -128,7 +129,11 @@
         </s:complexType>
       </s:element>
       <s:element name="ActulizarPrestamoResponse">
-        <s:complexType />
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ActulizarPrestamoResult" type="tns:Cuenta" />
+          </s:sequence>
+        </s:complexType>
       </s:element>
       <s:element name="ObtenerTodosPrestamos">
         <s:complexType>
@@ -141,6 +146,34 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="0" maxOccurs="1" name="ObtenerTodosPrestamosResult" type="tns:ArrayOfPrestamo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ObtenerTodasTransacciones">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="numeroCuenta" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ObtenerTodasTransaccionesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ObtenerTodasTransaccionesResult" type="tns:ArrayOfTransaccion" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ObtenerTodasTransaccionesDia">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="fecha" type="s:dateTime" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ObtenerTodasTransaccionesDiaResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ObtenerTodasTransaccionesDiaResult" type="tns:ArrayOfTransaccion" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -188,6 +221,18 @@
   <wsdl:message name="ObtenerTodosPrestamosSoapOut">
     <wsdl:part name="parameters" element="tns:ObtenerTodosPrestamosResponse" />
   </wsdl:message>
+  <wsdl:message name="ObtenerTodasTransaccionesSoapIn">
+    <wsdl:part name="parameters" element="tns:ObtenerTodasTransacciones" />
+  </wsdl:message>
+  <wsdl:message name="ObtenerTodasTransaccionesSoapOut">
+    <wsdl:part name="parameters" element="tns:ObtenerTodasTransaccionesResponse" />
+  </wsdl:message>
+  <wsdl:message name="ObtenerTodasTransaccionesDiaSoapIn">
+    <wsdl:part name="parameters" element="tns:ObtenerTodasTransaccionesDia" />
+  </wsdl:message>
+  <wsdl:message name="ObtenerTodasTransaccionesDiaSoapOut">
+    <wsdl:part name="parameters" element="tns:ObtenerTodasTransaccionesDiaResponse" />
+  </wsdl:message>
   <wsdl:portType name="CoreServicesSoap">
     <wsdl:operation name="ActualizarCuenta">
       <wsdl:input message="tns:ActualizarCuentaSoapIn" />
@@ -216,6 +261,14 @@
     <wsdl:operation name="ObtenerTodosPrestamos">
       <wsdl:input message="tns:ObtenerTodosPrestamosSoapIn" />
       <wsdl:output message="tns:ObtenerTodosPrestamosSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerTodasTransacciones">
+      <wsdl:input message="tns:ObtenerTodasTransaccionesSoapIn" />
+      <wsdl:output message="tns:ObtenerTodasTransaccionesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerTodasTransaccionesDia">
+      <wsdl:input message="tns:ObtenerTodasTransaccionesDiaSoapIn" />
+      <wsdl:output message="tns:ObtenerTodasTransaccionesDiaSoapOut" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="CoreServicesSoap" type="tns:CoreServicesSoap">
@@ -283,6 +336,24 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="ObtenerTodasTransacciones">
+      <soap:operation soapAction="http://intec.edu.do/ObtenerTodasTransacciones" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerTodasTransaccionesDia">
+      <soap:operation soapAction="http://intec.edu.do/ObtenerTodasTransaccionesDia" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="CoreServicesSoap12" type="tns:CoreServicesSoap">
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
@@ -342,6 +413,24 @@
     </wsdl:operation>
     <wsdl:operation name="ObtenerTodosPrestamos">
       <soap12:operation soapAction="http://intec.edu.do/ObtenerTodosPrestamos" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerTodasTransacciones">
+      <soap12:operation soapAction="http://intec.edu.do/ObtenerTodasTransacciones" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerTodasTransaccionesDia">
+      <soap12:operation soapAction="http://intec.edu.do/ObtenerTodasTransaccionesDia" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

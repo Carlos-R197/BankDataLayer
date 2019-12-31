@@ -43,6 +43,10 @@ namespace IntegracionWebService.localhost {
         
         private System.Threading.SendOrPostCallback ObtenerTodosPrestamosOperationCompleted;
         
+        private System.Threading.SendOrPostCallback ObtenerTodasTransaccionesOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback ObtenerTodasTransaccionesDiaOperationCompleted;
+        
         private bool useDefaultCredentialsSetExplicitly;
         
         /// <remarks/>
@@ -101,6 +105,12 @@ namespace IntegracionWebService.localhost {
         
         /// <remarks/>
         public event ObtenerTodosPrestamosCompletedEventHandler ObtenerTodosPrestamosCompleted;
+        
+        /// <remarks/>
+        public event ObtenerTodasTransaccionesCompletedEventHandler ObtenerTodasTransaccionesCompleted;
+        
+        /// <remarks/>
+        public event ObtenerTodasTransaccionesDiaCompletedEventHandler ObtenerTodasTransaccionesDiaCompleted;
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://intec.edu.do/ActualizarCuenta", RequestNamespace="http://intec.edu.do", ResponseNamespace="http://intec.edu.do", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
@@ -258,24 +268,27 @@ namespace IntegracionWebService.localhost {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://intec.edu.do/ActulizarPrestamo", RequestNamespace="http://intec.edu.do", ResponseNamespace="http://intec.edu.do", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public void ActulizarPrestamo(int idPrestamo, decimal cantidadPrestamo, decimal montoAPagar) {
-            this.Invoke("ActulizarPrestamo", new object[] {
+        public Cuenta ActulizarPrestamo(Cuenta cuenta, int idPrestamo, decimal cantidadPrestamo, decimal montoAPagar) {
+            object[] results = this.Invoke("ActulizarPrestamo", new object[] {
+                        cuenta,
                         idPrestamo,
                         cantidadPrestamo,
                         montoAPagar});
+            return ((Cuenta)(results[0]));
         }
         
         /// <remarks/>
-        public void ActulizarPrestamoAsync(int idPrestamo, decimal cantidadPrestamo, decimal montoAPagar) {
-            this.ActulizarPrestamoAsync(idPrestamo, cantidadPrestamo, montoAPagar, null);
+        public void ActulizarPrestamoAsync(Cuenta cuenta, int idPrestamo, decimal cantidadPrestamo, decimal montoAPagar) {
+            this.ActulizarPrestamoAsync(cuenta, idPrestamo, cantidadPrestamo, montoAPagar, null);
         }
         
         /// <remarks/>
-        public void ActulizarPrestamoAsync(int idPrestamo, decimal cantidadPrestamo, decimal montoAPagar, object userState) {
+        public void ActulizarPrestamoAsync(Cuenta cuenta, int idPrestamo, decimal cantidadPrestamo, decimal montoAPagar, object userState) {
             if ((this.ActulizarPrestamoOperationCompleted == null)) {
                 this.ActulizarPrestamoOperationCompleted = new System.Threading.SendOrPostCallback(this.OnActulizarPrestamoOperationCompleted);
             }
             this.InvokeAsync("ActulizarPrestamo", new object[] {
+                        cuenta,
                         idPrestamo,
                         cantidadPrestamo,
                         montoAPagar}, this.ActulizarPrestamoOperationCompleted, userState);
@@ -284,7 +297,7 @@ namespace IntegracionWebService.localhost {
         private void OnActulizarPrestamoOperationCompleted(object arg) {
             if ((this.ActulizarPrestamoCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-                this.ActulizarPrestamoCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+                this.ActulizarPrestamoCompleted(this, new ActulizarPrestamoCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -314,6 +327,64 @@ namespace IntegracionWebService.localhost {
             if ((this.ObtenerTodosPrestamosCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.ObtenerTodosPrestamosCompleted(this, new ObtenerTodosPrestamosCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://intec.edu.do/ObtenerTodasTransacciones", RequestNamespace="http://intec.edu.do", ResponseNamespace="http://intec.edu.do", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public Transaccion[] ObtenerTodasTransacciones(int numeroCuenta) {
+            object[] results = this.Invoke("ObtenerTodasTransacciones", new object[] {
+                        numeroCuenta});
+            return ((Transaccion[])(results[0]));
+        }
+        
+        /// <remarks/>
+        public void ObtenerTodasTransaccionesAsync(int numeroCuenta) {
+            this.ObtenerTodasTransaccionesAsync(numeroCuenta, null);
+        }
+        
+        /// <remarks/>
+        public void ObtenerTodasTransaccionesAsync(int numeroCuenta, object userState) {
+            if ((this.ObtenerTodasTransaccionesOperationCompleted == null)) {
+                this.ObtenerTodasTransaccionesOperationCompleted = new System.Threading.SendOrPostCallback(this.OnObtenerTodasTransaccionesOperationCompleted);
+            }
+            this.InvokeAsync("ObtenerTodasTransacciones", new object[] {
+                        numeroCuenta}, this.ObtenerTodasTransaccionesOperationCompleted, userState);
+        }
+        
+        private void OnObtenerTodasTransaccionesOperationCompleted(object arg) {
+            if ((this.ObtenerTodasTransaccionesCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.ObtenerTodasTransaccionesCompleted(this, new ObtenerTodasTransaccionesCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://intec.edu.do/ObtenerTodasTransaccionesDia", RequestNamespace="http://intec.edu.do", ResponseNamespace="http://intec.edu.do", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public Transaccion[] ObtenerTodasTransaccionesDia(System.DateTime fecha) {
+            object[] results = this.Invoke("ObtenerTodasTransaccionesDia", new object[] {
+                        fecha});
+            return ((Transaccion[])(results[0]));
+        }
+        
+        /// <remarks/>
+        public void ObtenerTodasTransaccionesDiaAsync(System.DateTime fecha) {
+            this.ObtenerTodasTransaccionesDiaAsync(fecha, null);
+        }
+        
+        /// <remarks/>
+        public void ObtenerTodasTransaccionesDiaAsync(System.DateTime fecha, object userState) {
+            if ((this.ObtenerTodasTransaccionesDiaOperationCompleted == null)) {
+                this.ObtenerTodasTransaccionesDiaOperationCompleted = new System.Threading.SendOrPostCallback(this.OnObtenerTodasTransaccionesDiaOperationCompleted);
+            }
+            this.InvokeAsync("ObtenerTodasTransaccionesDia", new object[] {
+                        fecha}, this.ObtenerTodasTransaccionesDiaOperationCompleted, userState);
+        }
+        
+        private void OnObtenerTodasTransaccionesDiaOperationCompleted(object arg) {
+            if ((this.ObtenerTodasTransaccionesDiaCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.ObtenerTodasTransaccionesDiaCompleted(this, new ObtenerTodasTransaccionesDiaCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -682,7 +753,29 @@ namespace IntegracionWebService.localhost {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
-    public delegate void ActulizarPrestamoCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    public delegate void ActulizarPrestamoCompletedEventHandler(object sender, ActulizarPrestamoCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class ActulizarPrestamoCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal ActulizarPrestamoCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public Cuenta Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((Cuenta)(this.results[0]));
+            }
+        }
+    }
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
@@ -706,6 +799,58 @@ namespace IntegracionWebService.localhost {
             get {
                 this.RaiseExceptionIfNecessary();
                 return ((Prestamo[])(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    public delegate void ObtenerTodasTransaccionesCompletedEventHandler(object sender, ObtenerTodasTransaccionesCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class ObtenerTodasTransaccionesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal ObtenerTodasTransaccionesCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public Transaccion[] Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((Transaccion[])(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    public delegate void ObtenerTodasTransaccionesDiaCompletedEventHandler(object sender, ObtenerTodasTransaccionesDiaCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class ObtenerTodasTransaccionesDiaCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal ObtenerTodasTransaccionesDiaCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public Transaccion[] Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((Transaccion[])(this.results[0]));
             }
         }
     }
