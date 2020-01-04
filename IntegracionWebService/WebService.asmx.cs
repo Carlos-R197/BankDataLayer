@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace IntegracionWebService
 {
-    public enum TipoTransaccion
+    public enum TipoTransaccionesBancarias
     {
         Interbancaria,
     }
@@ -41,14 +41,14 @@ namespace IntegracionWebService
         /// el numero de cuenta en la cual se depositara y el monto
         /// </summary>
         [WebMethod]
-        public void RealizarTransaccion(int numeroCuentaRetiro, int numeroCuentaDeposito, decimal monto, TipoTransaccion tipoTransaccion)
+        public void RealizarTransaccion(int numeroCuentaRetiro, int numeroCuentaDeposito, decimal monto, TipoTransaccionesBancarias tipoTransaccion)
         {
-            if (tipoTransaccion == TipoTransaccion.Interbancaria)
+            if (tipoTransaccion == TipoTransaccionesBancarias.Interbancaria)
             {
                 if (estaCoreAbajo)
                 {
-                    Cuenta.ActualizarCuenta(numeroCuentaRetiro, -monto, Integracion.DBClasses.TipoTransaccion.Transaccion);
-                    Cuenta.ActualizarCuenta(numeroCuentaDeposito, monto, Integracion.DBClasses.TipoTransaccion.Transaccion);
+                    Cuenta.ActualizarCuenta(numeroCuentaRetiro, -monto, TipoTransaccion.Transaccion);
+                    Cuenta.ActualizarCuenta(numeroCuentaDeposito, monto, TipoTransaccion.Transaccion);
                 }
                 else
                 {
@@ -67,7 +67,7 @@ namespace IntegracionWebService
             if (estaCoreAbajo)
             {
                 cuenta.balanceDisponible += monto;
-                Cuenta.ActualizarCuenta(cuenta.numeroCuenta, cuenta.balanceDisponible, Integracion.DBClasses.TipoTransaccion.Deposito);
+                Cuenta.ActualizarCuenta(cuenta.numeroCuenta, cuenta.balanceDisponible, TipoTransaccion.Deposito);
                 cuenta.transacciones = Transaccion.ObtenerTodasTransacciones(cuenta.numeroCuenta);
             }
             else
@@ -90,7 +90,7 @@ namespace IntegracionWebService
                 if (estaCoreAbajo)
                 {
                     cuenta.balanceDisponible -= monto;
-                    Cuenta.ActualizarCuenta(cuenta.numeroCuenta, cuenta.balanceDisponible, Integracion.DBClasses.TipoTransaccion.Retiro);
+                    Cuenta.ActualizarCuenta(cuenta.numeroCuenta, cuenta.balanceDisponible, TipoTransaccion.Retiro);
                     cuenta.transacciones = Transaccion.ObtenerTodasTransacciones(cuenta.numeroCuenta);
                 }
                 else
