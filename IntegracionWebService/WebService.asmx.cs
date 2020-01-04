@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Web.Services;
-using IntegracionWebService.localhost;
+using Integracion.DBClasses;
 using log4net;
+using System.Linq;
 
 namespace IntegracionWebService
 {
@@ -20,8 +21,8 @@ namespace IntegracionWebService
     // [System.Web.Script.Services.ScriptService]
     public class WebService : System.Web.Services.WebService
     {
-        private readonly CoreServices core = new CoreServices();
         private readonly ILog logger = LogManager.GetLogger(System.Environment.MachineName);
+        private readonly bool estaCoreAbajo = true;
 
         /// <summary>
         /// Busca una cuenta existente en la database a partir de su numero. Si no existe retorna null.
@@ -29,7 +30,10 @@ namespace IntegracionWebService
         [WebMethod]
         public Cuenta ObtenerCuenta(int numeroCuenta)
         {
-            return core.ObtenerCuenta(numeroCuenta);
+            if (estaCoreAbajo)
+                return Cuenta.ObtenerCuenta(numeroCuenta);
+            else
+                return null;//TODO
         }
 
         /// <summary>
@@ -41,22 +45,36 @@ namespace IntegracionWebService
         {
             if (tipoTransaccion == TipoTransaccion.Interbancaria)
             {
-                //El monto aqui debe ser negativo ya que estamos retirando del balance de la cuenta
-                core.ActualizarCuenta(numeroCuentaRetiro, -monto, localhost.TipoTransaccion.Transaccion);
-                
-                core.ActualizarCuenta(numeroCuentaDeposito, monto, localhost.TipoTransaccion.Transaccion);
+                if (estaCoreAbajo)
+                {
+                    Cuenta.ActualizarCuenta(numeroCuentaRetiro, -monto, Integracion.DBClasses.TipoTransaccion.Transaccion);
+                    Cuenta.ActualizarCuenta(numeroCuentaDeposito, monto, Integracion.DBClasses.TipoTransaccion.Transaccion);
+                }
+                else
+                {
+                    //TODO
+                }
             }
         }
 
         /// <summary>
-        /// Deposita un monto en una cuenta existente y retorna un objeto de tipo cuenta con su balance actualizado.
+        /// Deposita un monto en una cuenta existente y retorna un objeto de tipo cuenta 
+        /// con su balance actualizado y transacciones actualizadas
         /// </summary>
         [WebMethod]
         public Cuenta DepositarMonto(Cuenta cuenta, decimal monto)
         {
-            cuenta.balanceDisponible += monto;
-            core.ActualizarCuenta(cuenta.numeroCuenta, cuenta.balanceDisponible, localhost.TipoTransaccion.Deposito);
-            cuenta.transacciones = core.ObtenerTodasTransacciones(cuenta.numeroCuenta);
+            if (estaCoreAbajo)
+            {
+                cuenta.balanceDisponible += monto;
+                Cuenta.ActualizarCuenta(cuenta.numeroCuenta, cuenta.balanceDisponible, Integracion.DBClasses.TipoTransaccion.Deposito);
+                cuenta.transacciones = Transaccion.ObtenerTodasTransacciones(cuenta.numeroCuenta);
+            }
+            else
+            {
+                //TODO
+            }
+
             return cuenta;
         }
 
@@ -69,13 +87,21 @@ namespace IntegracionWebService
         {
             if (cuenta.balanceDisponible >= monto)
             {
-                cuenta.balanceDisponible -= monto;
-                core.ActualizarCuenta(cuenta.numeroCuenta, cuenta.balanceDisponible, localhost.TipoTransaccion.Retiro);
-                cuenta.transacciones = core.ObtenerTodasTransacciones(cuenta.numeroCuenta);
-                return cuenta;
+                if (estaCoreAbajo)
+                {
+                    cuenta.balanceDisponible -= monto;
+                    Cuenta.ActualizarCuenta(cuenta.numeroCuenta, cuenta.balanceDisponible, Integracion.DBClasses.TipoTransaccion.Retiro);
+                    cuenta.transacciones = Transaccion.ObtenerTodasTransacciones(cuenta.numeroCuenta);
+                }
+                else
+                {
+                    //TODO
+                }
             }
             else
                 throw new ArgumentException("La cuenta no tiene balance suficiente disponible para realizar esta transaccion");
+
+            return cuenta;
         }
 
         /// <summary>
@@ -84,16 +110,35 @@ namespace IntegracionWebService
         [WebMethod]
         public Cajero ValidarCajero(string usuario, string contraseña)
         {
-            return core.ObtenerCajero(usuario, contraseña);
+            return Cajero.ObtenerCajero(usuario, contraseña);
         }
 
         /// <summary>
         /// Paga un monto especifico de un prestamo existente
         /// </summary>
         [WebMethod]
-        public Cuenta PagarPrestamo(Cuenta cuenta, Prestamo prestamo, decimal montoAPagar)
+        public Cuenta PagarPrestamo(Cuenta cuenta, Prestamo prestamo, decimal monto)
         {
-            return core.ActulizarPrestamo(cuenta, prestamo.id, prestamo.montoPendientePorPagar, montoAPagar);
+            if (estaCoreAbajo)
+            {
+                if (monto >= prestamo.montoPendientePorPagar)
+                {
+                    Prestamo.EliminarPrestamo(prestamo.id);
+                    cuenta.prestamos = cuenta.prestamos.Where(t => t.id != prestamo.id).ToArray();
+                }
+                else
+                {
+                    Prestamo.ActualizarPrestamo(prestamo.id, monto);
+                    Prestamo prestamoActual = cuenta.prestamos.First(t => t.id == prestamo.id);
+                    prestamoActual.montoPendientePorPagar -= monto;
+                }
+            }
+            else
+            {
+                //TODO
+            }
+
+            return cuenta;
         }
 
         /// <summary>
@@ -102,7 +147,15 @@ namespace IntegracionWebService
         [WebMethod]
         public Transaccion[] ObtenerTodasTransaccionesDelDia(DateTime fecha)
         {
-            return core.ObtenerTodasTransaccionesDia(fecha);
+            Transaccion[] transacciones = new Transaccion[0];
+            if (estaCoreAbajo)
+                transacciones = Transaccion.ObtenerTodasTransaccionesDelDia(fecha);
+            else
+            {
+                //TODO
+            }
+
+            return transacciones;
         }
 
     }

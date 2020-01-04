@@ -1,9 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="IntegracionWebService.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)">
   <Profiles />
-  <Settings>
-    <Setting Name="IntegracionWebService_localhost_CoreServices" Type="(Web Service URL)" Scope="Application">
-      <Value Profile="(Default)">http://localhost:63610/CoreServices.asmx</Value>
-    </Setting>
-  </Settings>
+  <Settings />
 </SettingsFile>
