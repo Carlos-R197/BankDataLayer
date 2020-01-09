@@ -31,7 +31,7 @@ namespace Integracion.DBClasses
 
             var data = new StoredProcedureData()
             {
-                nombres = "InsertarTransaccion",
+                nombre = "InsertarTransaccion",
                 nombresParametros = new string[] { "@NumeroCuenta", "@TipoTransaccion", "@Monto" },
                 valoresParametros = new object[] { numeroCuenta, tipoDeTransaccion, monto }
             };
@@ -42,28 +42,41 @@ namespace Integracion.DBClasses
         {
             var data = new StoredProcedureData()
             {
-                nombres = "ObtenerTodasTransacciones",
+                nombre = "ObtenerTodasTransacciones",
                 nombresParametros = new string[] { "@NumeroCuenta" },
                 valoresParametros = new object[] { numeroCuenta }
             };
-            DataTable table = SqlWrapper.EjecutaLeerTodoStoredProcedure(data);
-            var transacciones = new Transaccion[table.Rows.Count];
-            for (int i = 0; i < transacciones.Length; i++)
-                transacciones[i] = ArmarTransaccion(table.Rows[i]);
-            return transacciones;
+
+            return ObtenerTransacciones(data);
         }
 
         public static Transaccion[] ObtenerTodasTransaccionesDelDia(DateTime fecha)
         {
             var data = new StoredProcedureData()
             {
-                nombres = "ObtenerTransaccionesDia",
+                nombre = "ObtenerTransaccionesDia",
                 nombresParametros = new string[] { "@Date" },
                 valoresParametros = new object[] { fecha.Date }
             };
+            return ObtenerTransacciones(data);
+        }
+
+        public static Transaccion[] ObtenerTodasTransaccionesRango(DateTime fechaComienzo, DateTime fechaFinal)
+        {
+            var data = new StoredProcedureData()
+            {
+                nombre = "ObtenerTransaccionesFechaRango",
+                nombresParametros = new string[] { "@FechaComienzo", "@FechaFinal" },
+                valoresParametros = new object[] { fechaComienzo, fechaFinal }
+            };
+            return ObtenerTransacciones(data);
+        }
+
+        private static Transaccion[] ObtenerTransacciones(StoredProcedureData data)
+        {
             DataTable table = SqlWrapper.EjecutaLeerTodoStoredProcedure(data);
             var transacciones = new Transaccion[table.Rows.Count];
-            for (int i = 0; i < transacciones.Length; i++)
+            for (int i = 0; i < table.Rows.Count; i++)
                 transacciones[i] = ArmarTransaccion(table.Rows[i]);
             return transacciones;
         }

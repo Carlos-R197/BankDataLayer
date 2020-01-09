@@ -18,7 +18,7 @@ namespace Integracion.Sql
                 SqlTransaction transaction = connection.BeginTransaction();
                 try
                 {
-                    using (var command = new SqlCommand(data.nombres, connection, transaction))
+                    using (var command = new SqlCommand(data.nombre, connection, transaction))
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
@@ -37,12 +37,16 @@ namespace Integracion.Sql
             }
         }
 
+        /// <summary>
+        /// Ejecuta una stored procedure cuyo objetivo sea buscar un elemento especifico dentro de la database.
+        /// De no existir ningun elemento retorna null.
+        /// </summary>
         public static DataRow EjecutaLeerUnoStoredProcedure(StoredProcedureData data)
         {
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                using (var command = new SqlCommand(data.nombres, connection))
+                using (var command = new SqlCommand(data.nombre, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
 
@@ -67,7 +71,7 @@ namespace Integracion.Sql
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                using (var command = new SqlCommand(data.nombres, connection))
+                using (var command = new SqlCommand(data.nombre, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
 

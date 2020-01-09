@@ -10,7 +10,7 @@ namespace Integracion.DBClasses
         public int numeroCuenta;
         public decimal montoPendientePorPagar;
 
-        public static Prestamo ArmarPrestamo(DataRow row)
+        private static Prestamo ArmarPrestamo(DataRow row)
         {
             var prestamo = new Prestamo()
             {
@@ -25,7 +25,7 @@ namespace Integracion.DBClasses
         {
             var data = new StoredProcedureData()
             {
-                nombres = "InsertarPrestamo",
+                nombre = "InsertarPrestamo",
                 nombresParametros = new string[] { "@NumeroCuenta", "@Monto" },
                 valoresParametros = new object[] { numeroCuenta, montoPrestamo }
             };
@@ -36,7 +36,7 @@ namespace Integracion.DBClasses
         {
             var data = new StoredProcedureData()
             {
-                nombres = "ActualizarPrestamo",
+                nombre = "ActualizarPrestamo",
                 nombresParametros = new string[] { "@Id", "@MontoAPagar" },
                 valoresParametros = new object[] { idPrestamo, montoAPagar }
             };
@@ -47,7 +47,7 @@ namespace Integracion.DBClasses
         {
             var data = new StoredProcedureData()
             {
-                nombres = "EliminarPrestamo",
+                nombre = "EliminarPrestamo",
                 nombresParametros = new string[] { "@Id" },
                 valoresParametros = new object[] { idPrestamo }
             };
@@ -58,7 +58,7 @@ namespace Integracion.DBClasses
         {
             var data = new StoredProcedureData()
             {
-                nombres = "ObtenerPrestamos",
+                nombre = "ObtenerPrestamos",
                 nombresParametros = new string[] { "@NumeroCuenta" },
                 valoresParametros = new object[] { numeroCuenta }
             };

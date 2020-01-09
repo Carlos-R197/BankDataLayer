@@ -25,6 +25,80 @@ namespace IntegracionWebService
         private readonly bool estaCoreAbajo = true;
 
         /// <summary>
+        /// Inserta un nuevo cliente dentro de la database.
+        /// </summary>
+        [WebMethod]
+        public void InsertarCliente(string matricula, string nombres, string apellidos)
+        {
+            if (estaCoreAbajo)
+            {
+                if (matricula.Length <= 12 && nombres.Length <= 50 && apellidos.Length <= 50)
+                    Cliente.InsertarCliente(matricula, nombres, apellidos);
+                else
+                    throw new ArgumentException("Uno de los argumentos es demasiado largo. " +
+                        "El largo de la matricula debe ser menor o igual a 12 y los nombres y apellidos menor o igual a 50");
+            }
+            else
+            {
+                //TODO.
+            }
+        }
+
+        /// <summary>
+        /// Busca un objeto de tipo cliente existente en la database y lo retorna. Si no existe retorna null.
+        /// </summary>
+        [WebMethod]
+        public Cliente ObtenerCliente(string nombre, string apellido)
+        {
+            if (estaCoreAbajo)
+            {
+                if (nombre.Length <= 50 && apellido.Length <= 50)
+                    return Cliente.ObtenerCliente(nombre, apellido);
+                else
+                    throw new ArgumentException("Uno de los argumentos es demasiado largo. " +
+                        "El nombre y el apellido no pueden tener un largo de mas de 50");
+            }
+            else
+            {
+                //TODO.
+                throw new NotImplementedException();
+            }
+        }
+
+        /// <summary>
+        /// Insertar una nueva cuenta dentro de la database. 
+        /// </summary>
+        [WebMethod]
+        public void InsertarCuenta(int numeroCuenta, string cedula, string nombres, string apellidos)
+        {
+            if (estaCoreAbajo)
+            {
+                if (cedula.Length <= 12 && nombres.Length <= 50 && apellidos.Length <= 50)
+                    Cuenta.InsertarCuenta(numeroCuenta, cedula, nombres, apellidos);
+                else
+                    throw new ArgumentException("Uno de los argumentos es demasiado largo. " +
+                       "El largo de la matricula debe ser menor o igual a 12 y los nombres y apellidos menor o igual a 50");
+            }
+            else
+            {
+                //TODO.
+            }
+        }
+
+        /// <summary>
+        /// Busca todas las cuentas existentes en base a una matricula. Si no existe ninguna cuenta retorna null.
+        /// La cedula no puede tener un largo de mas de 12.
+        /// </summary>
+        [WebMethod]
+        public Cuenta[] ObtenerCuentas(string cedula)
+        {
+            if (cedula.Length <= 12)
+                return Cuenta.ObtenerCuentas(cedula);
+            else
+                throw new ArgumentException("La cedula no puede tener un largo de más de 12");
+        }
+
+        /// <summary>
         /// Busca una cuenta existente en la database a partir de su numero. Si no existe retorna null.
         /// </summary>
         [WebMethod]
@@ -142,7 +216,8 @@ namespace IntegracionWebService
         }
 
         /// <summary>
-        /// Retorna todas las trancciones ocurridas en una fecha especifica sin tener en cuenta la hora
+        /// Retorna todas las trancciones ocurridas en una fecha especifica sin tener en cuenta la hora.
+        /// Si no existe ninguna retorna un array vacio.
         /// </summary>
         [WebMethod]
         public Transaccion[] ObtenerTodasTransaccionesDelDia(DateTime fecha)
@@ -153,6 +228,23 @@ namespace IntegracionWebService
             else
             {
                 //TODO
+            }
+
+            return transacciones;
+        }
+
+        /// <summary>
+        /// Retorna todas las transacciones ocurridas entre dos fechas. Si no existe ninguna retorna un array vacio.
+        /// </summary>
+        [WebMethod]
+        public Transaccion[] ObtenerTodasTransaccionesRango(DateTime fechaComienzo, DateTime fechaFinal)
+        {
+            var transacciones = new Transaccion[0];
+            if (estaCoreAbajo)
+                transacciones = Transaccion.ObtenerTodasTransaccionesRango(fechaComienzo, fechaFinal);
+            else
+            {
+                //Todo
             }
 
             return transacciones;

@@ -18,7 +18,7 @@ namespace Integracion.DBClasses
         {
             var data = new StoredProcedureData()
             {
-                nombres = "InsertarCuenta",
+                nombre = "InsertarCuenta",
                 nombresParametros = new string[] { "@NumeroCuenta", "@ClienteCedula", "@Nombres", "@Apellidos" },
                 valoresParametros = new object[] { numeroCuenta, clienteCedula, nombres, apellidos}
             };
@@ -29,7 +29,7 @@ namespace Integracion.DBClasses
         {
             var data = new StoredProcedureData()
             {
-                nombres = "ActualizarCuenta",
+                nombre = "ActualizarCuenta",
                 nombresParametros = new string[] { "@NumeroCuenta", "@MontoPorAñadir" },
                 valoresParametros = new object[] { numeroCuenta, montoPorAñadir }
             };
@@ -41,18 +41,34 @@ namespace Integracion.DBClasses
         {
             var data = new StoredProcedureData()
             {
-                nombres = "ObtenerCuenta",
+                nombre = "ObtenerCuenta",
                 nombresParametros = new string[] { "@NumeroCuenta" },
                 valoresParametros = new object[] { numeroCuenta }
             };
-            DataRow cuentaTableRow = SqlWrapper.EjecutaLeerUnoStoredProcedure(data);
-            if (cuentaTableRow != null)
-                return Cuenta.ArmarCuenta(cuentaTableRow, numeroCuenta);
+            DataRow row = SqlWrapper.EjecutaLeerUnoStoredProcedure(data);
+            if (row != null)
+                return Cuenta.ArmarCuenta(row);
             else
                 return null;
         }
 
-        private static Cuenta ArmarCuenta(DataRow row, int numeroCuenta)
+        public static Cuenta[] ObtenerCuentas(string cedula)
+        {
+            var data = new StoredProcedureData()
+            {
+                nombre = "ObtenerCuentas",
+                nombresParametros = new string[] { "@Cedula" },
+                valoresParametros = new object[] { cedula }
+            };
+            DataTable table = SqlWrapper.EjecutaLeerTodoStoredProcedure(data);
+            var cuentas = new Cuenta[table.Rows.Count];
+            for (int i = 0; i < cuentas.Length; i++)
+                cuentas[i] = ArmarCuenta(table.Rows[i]);
+
+            return cuentas;
+        }
+
+        private static Cuenta ArmarCuenta(DataRow row)
         {
             var cuenta = new Cuenta()
             {
@@ -60,10 +76,10 @@ namespace Integracion.DBClasses
                 clienteCedula = row[1].ToString(),
                 balanceDisponible = Int32.Parse(row[2].ToString()),
                 nombres = row[3].ToString(),
-                apellidos = row[4].ToString(),
-                prestamos = Prestamo.ObtenerTodosPrestamos(numeroCuenta),
-                transacciones = Transaccion.ObtenerTodasTransacciones(numeroCuenta)
+                apellidos = row[4].ToString()
             };
+            cuenta.prestamos = Prestamo.ObtenerTodosPrestamos(cuenta.numeroCuenta);
+            cuenta.transacciones = Transaccion.ObtenerTodasTransacciones(cuenta.numeroCuenta);
 
             return cuenta;
         }

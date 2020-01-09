@@ -27,7 +27,7 @@ namespace Integracion.DBClasses
             {
                 var data = new StoredProcedureData()
                 {
-                    nombres = "ConsultarCajero",
+                    nombre = "ConsultarCajero",
                     nombresParametros = new string[] { "@Usuario", "@Contraseña" },
                     valoresParametros = new object[] { usuario, contraseña }
                 };

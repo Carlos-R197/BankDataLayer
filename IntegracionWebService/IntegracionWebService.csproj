@@ -134,6 +134,7 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Classes\Cajero.cs" />
+    <Compile Include="Classes\Cliente.cs" />
     <Compile Include="Classes\Cuenta.cs" />
     <Compile Include="Classes\Prestamo.cs" />
     <Compile Include="Classes\SqlWrapper.cs" />
