@@ -81,9 +81,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Web References\net.azurewebsites.integracionwebservice201912344\Cajero.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
     <None Include="Web References\net.azurewebsites.integracionwebservice201912344\Cliente.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>

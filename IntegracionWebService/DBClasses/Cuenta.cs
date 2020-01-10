@@ -34,16 +34,16 @@ namespace Integracion.DBClasses
             storedProcedure.Ejecutar();
         }
 
-        public static void ActualizarCuenta(int numeroCuenta, decimal montoPorAñadir, TipoTransaccion tipoTransaccion)
+        public static void ActualizarCuenta(int numeroCuenta, decimal nuevoMonto, decimal monto, TipoTransaccion tipoTransaccion)
         {
             var storedProcedure = new ModificarStoredProcedure()
             {
                 nombre = "ActualizarCuenta",
-                nombresParametros = new string[] { "@NumeroCuenta", "@MontoPorAñadir" },
-                valoresParametros = new object[] { numeroCuenta, montoPorAñadir }
+                nombresParametros = new string[] { "@NumeroCuenta", "@NuevoMonto" },
+                valoresParametros = new object[] { numeroCuenta, nuevoMonto }
             };
             storedProcedure.Ejecutar();
-            Transaccion.InsertarTransaccion(numeroCuenta, tipoTransaccion, montoPorAñadir);
+            Transaccion.InsertarTransaccion(numeroCuenta, tipoTransaccion, monto);
         }
 
         public static Cuenta ObtenerCuenta(int numeroCuenta)

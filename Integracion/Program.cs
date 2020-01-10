@@ -8,9 +8,16 @@ namespace Integracion
         static void Main(string[] args)
         {
             var integracion = new WebService();
+            //var cuenta = integracion.ObtenerCuenta(55555);
+            //cuenta = integracion.DepositarMonto(cuenta, 20000);
 
-            var cuenta = integracion.ObtenerCuenta(55555);
-            Console.WriteLine("Nombre de cuenta: {0}", cuenta.nombres);
+            var date = new DateTime(2020, 1, 1);
+            var endDate = new DateTime(2020, 1, 11);
+
+            Transaccion[] transacciones = integracion.ObtenerTodasTransaccionesRango(date, endDate);
+            foreach (var transaccion in transacciones)
+                Console.WriteLine("{0}", transaccion);
+            Console.WriteLine(transacciones.Length);
 
             Console.ReadLine();
         }

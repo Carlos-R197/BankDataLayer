@@ -5,18 +5,18 @@ namespace Integracion.DBClasses
 {
     public class Cliente
     {
-        public string matricula;
+        public string cedula;
         public string nombres;
         public string apellidos;
 
         public override string ToString()
         {
-            return string.Format("Matricula: {0} Nombres: {1}, Apellidos: {2}", matricula, nombres, apellidos);
+            return string.Format("Matricula: {0} Nombres: {1}, Apellidos: {2}", cedula, nombres, apellidos);
         }
 
         public bool EsValido()
         {
-            return matricula.Length <= 12 && nombres.Length <= 50 && apellidos.Length <= 50;
+            return cedula.Length == 11 && nombres.Length <= 50 && apellidos.Length <= 50;
         }
 
         public static void InsertarCliente(Cliente cliente)
@@ -25,7 +25,7 @@ namespace Integracion.DBClasses
             {
                 nombre = "InsertarCliente",
                 nombresParametros = new string[] { "@Cedula", "@Nombres", "@Apellidos" },
-                valoresParametros = new object[] { cliente.matricula, cliente.nombres, cliente.apellidos }
+                valoresParametros = new object[] { cliente.cedula, cliente.nombres, cliente.apellidos }
             };
             storedProcedure.Ejecutar();
         }
@@ -49,7 +49,7 @@ namespace Integracion.DBClasses
         {
             var cliente = new Cliente()
             {
-                matricula = row[0].ToString(),
+                cedula = row[0].ToString(),
                 nombres = row[1].ToString(),
                 apellidos = row[2].ToString()
             };

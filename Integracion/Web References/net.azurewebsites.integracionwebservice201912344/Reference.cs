@@ -45,7 +45,7 @@ namespace Integracion.net.azurewebsites.integracionwebservice201912344 {
         
         private System.Threading.SendOrPostCallback RetirarMontoOperationCompleted;
         
-        private System.Threading.SendOrPostCallback ValidarCajeroOperationCompleted;
+        private System.Threading.SendOrPostCallback InsertarPrestamoOperationCompleted;
         
         private System.Threading.SendOrPostCallback PagarPrestamoOperationCompleted;
         
@@ -116,7 +116,7 @@ namespace Integracion.net.azurewebsites.integracionwebservice201912344 {
         public event RetirarMontoCompletedEventHandler RetirarMontoCompleted;
         
         /// <remarks/>
-        public event ValidarCajeroCompletedEventHandler ValidarCajeroCompleted;
+        public event InsertarPrestamoCompletedEventHandler InsertarPrestamoCompleted;
         
         /// <remarks/>
         public event PagarPrestamoCompletedEventHandler PagarPrestamoCompleted;
@@ -280,29 +280,27 @@ namespace Integracion.net.azurewebsites.integracionwebservice201912344 {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://intec.edu.do/RealizarTransaccion", RequestNamespace="http://intec.edu.do", ResponseNamespace="http://intec.edu.do", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public void RealizarTransaccion(int numeroCuentaRetiro, int numeroCuentaDeposito, decimal monto, TipoTransaccionesBancarias tipoTransaccion) {
+        public void RealizarTransaccion(Cuenta cuentaRetiro, Cuenta cuentaDeposito, decimal monto) {
             this.Invoke("RealizarTransaccion", new object[] {
-                        numeroCuentaRetiro,
-                        numeroCuentaDeposito,
-                        monto,
-                        tipoTransaccion});
+                        cuentaRetiro,
+                        cuentaDeposito,
+                        monto});
         }
         
         /// <remarks/>
-        public void RealizarTransaccionAsync(int numeroCuentaRetiro, int numeroCuentaDeposito, decimal monto, TipoTransaccionesBancarias tipoTransaccion) {
-            this.RealizarTransaccionAsync(numeroCuentaRetiro, numeroCuentaDeposito, monto, tipoTransaccion, null);
+        public void RealizarTransaccionAsync(Cuenta cuentaRetiro, Cuenta cuentaDeposito, decimal monto) {
+            this.RealizarTransaccionAsync(cuentaRetiro, cuentaDeposito, monto, null);
         }
         
         /// <remarks/>
-        public void RealizarTransaccionAsync(int numeroCuentaRetiro, int numeroCuentaDeposito, decimal monto, TipoTransaccionesBancarias tipoTransaccion, object userState) {
+        public void RealizarTransaccionAsync(Cuenta cuentaRetiro, Cuenta cuentaDeposito, decimal monto, object userState) {
             if ((this.RealizarTransaccionOperationCompleted == null)) {
                 this.RealizarTransaccionOperationCompleted = new System.Threading.SendOrPostCallback(this.OnRealizarTransaccionOperationCompleted);
             }
             this.InvokeAsync("RealizarTransaccion", new object[] {
-                        numeroCuentaRetiro,
-                        numeroCuentaDeposito,
-                        monto,
-                        tipoTransaccion}, this.RealizarTransaccionOperationCompleted, userState);
+                        cuentaRetiro,
+                        cuentaDeposito,
+                        monto}, this.RealizarTransaccionOperationCompleted, userState);
         }
         
         private void OnRealizarTransaccionOperationCompleted(object arg) {
@@ -375,33 +373,32 @@ namespace Integracion.net.azurewebsites.integracionwebservice201912344 {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://intec.edu.do/ValidarCajero", RequestNamespace="http://intec.edu.do", ResponseNamespace="http://intec.edu.do", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public Cajero ValidarCajero(string usuario, string contraseña) {
-            object[] results = this.Invoke("ValidarCajero", new object[] {
-                        usuario,
-                        contraseña});
-            return ((Cajero)(results[0]));
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://intec.edu.do/InsertarPrestamo", RequestNamespace="http://intec.edu.do", ResponseNamespace="http://intec.edu.do", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void InsertarPrestamo(int numeroCuenta, decimal monto) {
+            this.Invoke("InsertarPrestamo", new object[] {
+                        numeroCuenta,
+                        monto});
         }
         
         /// <remarks/>
-        public void ValidarCajeroAsync(string usuario, string contraseña) {
-            this.ValidarCajeroAsync(usuario, contraseña, null);
+        public void InsertarPrestamoAsync(int numeroCuenta, decimal monto) {
+            this.InsertarPrestamoAsync(numeroCuenta, monto, null);
         }
         
         /// <remarks/>
-        public void ValidarCajeroAsync(string usuario, string contraseña, object userState) {
-            if ((this.ValidarCajeroOperationCompleted == null)) {
-                this.ValidarCajeroOperationCompleted = new System.Threading.SendOrPostCallback(this.OnValidarCajeroOperationCompleted);
+        public void InsertarPrestamoAsync(int numeroCuenta, decimal monto, object userState) {
+            if ((this.InsertarPrestamoOperationCompleted == null)) {
+                this.InsertarPrestamoOperationCompleted = new System.Threading.SendOrPostCallback(this.OnInsertarPrestamoOperationCompleted);
             }
-            this.InvokeAsync("ValidarCajero", new object[] {
-                        usuario,
-                        contraseña}, this.ValidarCajeroOperationCompleted, userState);
+            this.InvokeAsync("InsertarPrestamo", new object[] {
+                        numeroCuenta,
+                        monto}, this.InsertarPrestamoOperationCompleted, userState);
         }
         
-        private void OnValidarCajeroOperationCompleted(object arg) {
-            if ((this.ValidarCajeroCompleted != null)) {
+        private void OnInsertarPrestamoOperationCompleted(object arg) {
+            if ((this.InsertarPrestamoCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-                this.ValidarCajeroCompleted(this, new ValidarCajeroCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+                this.InsertarPrestamoCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -525,19 +522,19 @@ namespace Integracion.net.azurewebsites.integracionwebservice201912344 {
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://intec.edu.do")]
     public partial class Cliente {
         
-        private string matriculaField;
+        private string cedulaField;
         
         private string nombresField;
         
         private string apellidosField;
         
         /// <remarks/>
-        public string matricula {
+        public string cedula {
             get {
-                return this.matriculaField;
+                return this.cedulaField;
             }
             set {
-                this.matriculaField = value;
+                this.cedulaField = value;
             }
         }
         
@@ -558,63 +555,6 @@ namespace Integracion.net.azurewebsites.integracionwebservice201912344 {
             }
             set {
                 this.apellidosField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.3752.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://intec.edu.do")]
-    public partial class Cajero {
-        
-        private int idField;
-        
-        private string usuarioField;
-        
-        private string contraseñaField;
-        
-        private string nombresField;
-        
-        /// <remarks/>
-        public int id {
-            get {
-                return this.idField;
-            }
-            set {
-                this.idField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string usuario {
-            get {
-                return this.usuarioField;
-            }
-            set {
-                this.usuarioField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string contraseña {
-            get {
-                return this.contraseñaField;
-            }
-            set {
-                this.contraseñaField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string nombres {
-            get {
-                return this.nombresField;
-            }
-            set {
-                this.nombresField = value;
             }
         }
     }
@@ -827,16 +767,6 @@ namespace Integracion.net.azurewebsites.integracionwebservice201912344 {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.3752.0")]
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://intec.edu.do")]
-    public enum TipoTransaccionesBancarias {
-        
-        /// <remarks/>
-        Interbancaria,
-    }
-    
-    /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
     public delegate void InsertarClienteCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
     
@@ -980,29 +910,7 @@ namespace Integracion.net.azurewebsites.integracionwebservice201912344 {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
-    public delegate void ValidarCajeroCompletedEventHandler(object sender, ValidarCajeroCompletedEventArgs e);
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class ValidarCajeroCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
-        private object[] results;
-        
-        internal ValidarCajeroCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
-            this.results = results;
-        }
-        
-        /// <remarks/>
-        public Cajero Result {
-            get {
-                this.RaiseExceptionIfNecessary();
-                return ((Cajero)(this.results[0]));
-            }
-        }
-    }
+    public delegate void InsertarPrestamoCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]

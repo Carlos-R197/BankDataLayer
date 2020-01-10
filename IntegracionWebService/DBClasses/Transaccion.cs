@@ -38,8 +38,8 @@ namespace Integracion.DBClasses
             var storedProcedure = new ModificarStoredProcedure()
             {
                 nombre = "InsertarTransaccion",
-                nombresParametros = new string[] { "@NumeroCuenta", "@TipoTransaccion", "@Monto" },
-                valoresParametros = new object[] { numeroCuenta, tipoDeTransaccion, monto }
+                nombresParametros = new string[] { "@NumeroCuenta", "@TipoTransaccion", "@Monto", "@Fecha" },
+                valoresParametros = new object[] { numeroCuenta, tipoDeTransaccion, monto, DateTime.Now }
             };
             storedProcedure.Ejecutar();
         }
@@ -89,14 +89,12 @@ namespace Integracion.DBClasses
 
         private static Transaccion ArmarTransaccion(DataRow row)
         {
-            var transaccion = new Transaccion()
-            {
-                id = int.Parse(row[0].ToString()),
-                numeroCuenta = int.Parse(row[1].ToString()),
-                tipoTransaccion = row[2].ToString(),
-                fecha = DateTime.Parse(row[3].ToString()),
-                monto = decimal.Parse(row[4].ToString())
-            };
+            var transaccion = new Transaccion();
+            transaccion.id = int.Parse(row[0].ToString());
+            transaccion.numeroCuenta = int.Parse(row[1].ToString());
+            transaccion.tipoTransaccion = row[2].ToString();
+            transaccion.fecha = DateTime.Parse(row[3].ToString());
+            transaccion.monto = decimal.Parse(row[4].ToString());
             return transaccion;
         }
     }

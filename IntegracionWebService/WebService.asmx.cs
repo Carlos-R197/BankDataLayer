@@ -43,7 +43,7 @@ namespace IntegracionWebService
             else
             {
                 var e = new ArgumentException("Uno de los argumentos es demasiado largo. " +
-                    "El largo de la matricula debe ser menor o igual a 12 y los nombres y apellidos menor o igual a 50");
+                    "El largo de la matricula debe ser igual a 11 y los nombres y apellidos menor o igual a 50");
                 ExceptionLogger.Log(e, log);
                 throw e;
             }
@@ -155,20 +155,31 @@ namespace IntegracionWebService
         /// el numero de cuenta en la cual se depositara y el monto
         /// </summary>
         [WebMethod]
-        public void RealizarTransaccion(int numeroCuentaRetiro, int numeroCuentaDeposito, decimal monto)
+        public void RealizarTransaccion(Cuenta cuentaRetiro, Cuenta cuentaDeposito, decimal monto)
         {
-            if (estaCoreAbajo)
+            if (cuentaRetiro.balanceDisponible >= monto)
             {
-                Cuenta.ActualizarCuenta(numeroCuentaRetiro, -monto, TipoTransaccion.Transaccion);
-                Cuenta.ActualizarCuenta(numeroCuentaDeposito, monto, TipoTransaccion.Transaccion);
+                if (estaCoreAbajo)
+                {
+                    cuentaRetiro.balanceDisponible -= monto;
+                    cuentaDeposito.balanceDisponible += monto;
+                    Cuenta.ActualizarCuenta(cuentaRetiro.numeroCuenta, cuentaRetiro.balanceDisponible, monto, TipoTransaccion.Transaccion);
+                    Cuenta.ActualizarCuenta(cuentaDeposito.numeroCuenta, cuentaDeposito.balanceDisponible, monto, TipoTransaccion.Transaccion);
+                }
+                else
+                {
+                    //TODO
+                }
+
+                log.Info(string.Format("Se recibieron los numeros de cuentas {0} y {1} para realizar una transaccion interbancaria" +
+                    "Se hicieron las actualizaciones adecuadas en la database", cuentaRetiro.numeroCuenta, cuentaDeposito.numeroCuenta));
             }
             else
             {
-                //TODO
+                var e = new ArgumentException("La cuenta retiro no tiene balance suficiente para realizar esta transaccion");
+                ExceptionLogger.Log(e, Globals.log);
+                throw e;
             }
-
-            log.Info(string.Format("Se recibieron los numeros de cuentas {0} y {1} para realizar una transaccion interbancaria" +
-                "Se hicieron las actualizaciones adecuadas en la database", numeroCuentaRetiro, numeroCuentaDeposito));
         }
 
         /// <summary>
@@ -181,7 +192,7 @@ namespace IntegracionWebService
             if (estaCoreAbajo)
             {
                 cuenta.balanceDisponible += monto;
-                Cuenta.ActualizarCuenta(cuenta.numeroCuenta, cuenta.balanceDisponible, TipoTransaccion.Deposito);
+                Cuenta.ActualizarCuenta(cuenta.numeroCuenta, cuenta.balanceDisponible, monto, TipoTransaccion.Deposito);
                 cuenta.transacciones = Transaccion.ObtenerTodasTransacciones(cuenta.numeroCuenta);
             }
             else
@@ -207,7 +218,7 @@ namespace IntegracionWebService
                 if (estaCoreAbajo)
                 {
                     cuenta.balanceDisponible -= monto;
-                    Cuenta.ActualizarCuenta(cuenta.numeroCuenta, cuenta.balanceDisponible, TipoTransaccion.Retiro);
+                    Cuenta.ActualizarCuenta(cuenta.numeroCuenta, cuenta.balanceDisponible, monto, TipoTransaccion.Retiro);
                     cuenta.transacciones = Transaccion.ObtenerTodasTransacciones(cuenta.numeroCuenta);
                 }
                 else
@@ -226,6 +237,17 @@ namespace IntegracionWebService
             }
 
             return cuenta;
+        }
+
+        /// <summary>
+        /// Inserta un nuevo prestamo dentro de la database y regresa un objeto de tipo cuenta actualizado. 
+        /// Deben aseguarse de que ya existe una cuenta dentro de la database con ese numero o lanzara error.
+        /// </summary>
+        [WebMethod]
+        public void InsertarPrestamo(int numeroCuenta, decimal monto)
+        {
+            Prestamo.InsertarPrestamo(numeroCuenta, monto);
+            log.Info(string.Format("Se ha creado un nuevo prestamo con el numero {0} y el monto {1}", numeroCuenta, monto));
         }
 
         /// <summary>

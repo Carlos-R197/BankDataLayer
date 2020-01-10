@@ -11,7 +11,7 @@
       </s:element>
       <s:complexType name="Cliente">
         <s:sequence>
-          <s:element minOccurs="0" maxOccurs="1" name="matricula" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cedula" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="nombres" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="apellidos" type="s:string" />
         </s:sequence>
@@ -120,18 +120,12 @@
       <s:element name="RealizarTransaccion">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="1" maxOccurs="1" name="numeroCuentaRetiro" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="numeroCuentaDeposito" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="cuentaRetiro" type="tns:Cuenta" />
+            <s:element minOccurs="0" maxOccurs="1" name="cuentaDeposito" type="tns:Cuenta" />
             <s:element minOccurs="1" maxOccurs="1" name="monto" type="s:decimal" />
-            <s:element minOccurs="1" maxOccurs="1" name="tipoTransaccion" type="tns:TipoTransaccionesBancarias" />
           </s:sequence>
         </s:complexType>
       </s:element>
-      <s:simpleType name="TipoTransaccionesBancarias">
-        <s:restriction base="s:string">
-          <s:enumeration value="Interbancaria" />
-        </s:restriction>
-      </s:simpleType>
       <s:element name="RealizarTransaccionResponse">
         <s:complexType />
       </s:element>
@@ -165,29 +159,17 @@
           </s:sequence>
         </s:complexType>
       </s:element>
-      <s:element name="ValidarCajero">
+      <s:element name="InsertarPrestamo">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
-            <s:element minOccurs="0" maxOccurs="1" name="contraseña" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="numeroCuenta" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="monto" type="s:decimal" />
           </s:sequence>
         </s:complexType>
       </s:element>
-      <s:element name="ValidarCajeroResponse">
-        <s:complexType>
-          <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="ValidarCajeroResult" type="tns:Cajero" />
-          </s:sequence>
-        </s:complexType>
+      <s:element name="InsertarPrestamoResponse">
+        <s:complexType />
       </s:element>
-      <s:complexType name="Cajero">
-        <s:sequence>
-          <s:element minOccurs="1" maxOccurs="1" name="id" type="s:int" />
-          <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
-          <s:element minOccurs="0" maxOccurs="1" name="contraseña" type="s:string" />
-          <s:element minOccurs="0" maxOccurs="1" name="nombres" type="s:string" />
-        </s:sequence>
-      </s:complexType>
       <s:element name="PagarPrestamo">
         <s:complexType>
           <s:sequence>
@@ -283,11 +265,11 @@
   <wsdl:message name="RetirarMontoSoapOut">
     <wsdl:part name="parameters" element="tns:RetirarMontoResponse" />
   </wsdl:message>
-  <wsdl:message name="ValidarCajeroSoapIn">
-    <wsdl:part name="parameters" element="tns:ValidarCajero" />
+  <wsdl:message name="InsertarPrestamoSoapIn">
+    <wsdl:part name="parameters" element="tns:InsertarPrestamo" />
   </wsdl:message>
-  <wsdl:message name="ValidarCajeroSoapOut">
-    <wsdl:part name="parameters" element="tns:ValidarCajeroResponse" />
+  <wsdl:message name="InsertarPrestamoSoapOut">
+    <wsdl:part name="parameters" element="tns:InsertarPrestamoResponse" />
   </wsdl:message>
   <wsdl:message name="PagarPrestamoSoapIn">
     <wsdl:part name="parameters" element="tns:PagarPrestamo" />
@@ -340,9 +322,9 @@
       <wsdl:input message="tns:RetirarMontoSoapIn" />
       <wsdl:output message="tns:RetirarMontoSoapOut" />
     </wsdl:operation>
-    <wsdl:operation name="ValidarCajero">
-      <wsdl:input message="tns:ValidarCajeroSoapIn" />
-      <wsdl:output message="tns:ValidarCajeroSoapOut" />
+    <wsdl:operation name="InsertarPrestamo">
+      <wsdl:input message="tns:InsertarPrestamoSoapIn" />
+      <wsdl:output message="tns:InsertarPrestamoSoapOut" />
     </wsdl:operation>
     <wsdl:operation name="PagarPrestamo">
       <wsdl:input message="tns:PagarPrestamoSoapIn" />
@@ -431,8 +413,8 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="ValidarCajero">
-      <soap:operation soapAction="http://intec.edu.do/ValidarCajero" style="document" />
+    <wsdl:operation name="InsertarPrestamo">
+      <soap:operation soapAction="http://intec.edu.do/InsertarPrestamo" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -542,8 +524,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="ValidarCajero">
-      <soap12:operation soapAction="http://intec.edu.do/ValidarCajero" style="document" />
+    <wsdl:operation name="InsertarPrestamo">
+      <soap12:operation soapAction="http://intec.edu.do/InsertarPrestamo" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
