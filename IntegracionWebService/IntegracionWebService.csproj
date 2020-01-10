@@ -11,7 +11,7 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IntegracionWebService</RootNamespace>
+    <RootNamespace>Integracion</RootNamespace>
     <AssemblyName>IntegracionWebService</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
@@ -133,13 +133,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Classes\Cajero.cs" />
-    <Compile Include="Classes\Cliente.cs" />
-    <Compile Include="Classes\Cuenta.cs" />
-    <Compile Include="Classes\Prestamo.cs" />
-    <Compile Include="Classes\SqlWrapper.cs" />
-    <Compile Include="Classes\StoredProcedureData.cs" />
-    <Compile Include="Classes\Transaccion.cs" />
+    <Compile Include="DBClasses\Cajero.cs" />
+    <Compile Include="DBClasses\Cliente.cs" />
+    <Compile Include="DBClasses\Cuenta.cs" />
+    <Compile Include="DBClasses\ExceptionLogger.cs" />
+    <Compile Include="DBClasses\Globals.cs" />
+    <Compile Include="Sql\LeerStoredProcedure.cs" />
+    <Compile Include="Sql\LeerTodoStoredProcedure.cs" />
+    <Compile Include="Sql\ModificarStoredProcedure.cs" />
+    <Compile Include="DBClasses\Prestamo.cs" />
+    <Compile Include="Sql\StoredProcedure.cs" />
+    <Compile Include="DBClasses\Transaccion.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

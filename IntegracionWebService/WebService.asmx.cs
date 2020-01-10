@@ -21,26 +21,31 @@ namespace IntegracionWebService
     // [System.Web.Script.Services.ScriptService]
     public class WebService : System.Web.Services.WebService
     {
-        private readonly ILog logger = LogManager.GetLogger(System.Environment.MachineName);
+        private readonly ILog log = LogManager.GetLogger(System.Environment.MachineName);
         private readonly bool estaCoreAbajo = true;
 
-        /// <summary>
-        /// Inserta un nuevo cliente dentro de la database.
-        /// </summary>
         [WebMethod]
-        public void InsertarCliente(string matricula, string nombres, string apellidos)
+        public void InsertarCliente(Cliente cliente)
         {
-            if (estaCoreAbajo)
+            if (cliente.EsValido())
             {
-                if (matricula.Length <= 12 && nombres.Length <= 50 && apellidos.Length <= 50)
-                    Cliente.InsertarCliente(matricula, nombres, apellidos);
+                if (estaCoreAbajo)
+                {
+                    Cliente.InsertarCliente(cliente);
+                    log.Info(string.Format("Se obtuvieron los parametros: {0} y se inserto un nuevo cliente en la database" +
+                        "local ya que core no esta funcionando", cliente));
+                }
                 else
-                    throw new ArgumentException("Uno de los argumentos es demasiado largo. " +
-                        "El largo de la matricula debe ser menor o igual a 12 y los nombres y apellidos menor o igual a 50");
+                {
+                    //TODO.
+                }
             }
             else
             {
-                //TODO.
+                var e = new ArgumentException("Uno de los argumentos es demasiado largo. " +
+                    "El largo de la matricula debe ser menor o igual a 12 y los nombres y apellidos menor o igual a 50");
+                ExceptionLogger.Log(e, log);
+                throw e;
             }
         }
 
@@ -50,38 +55,51 @@ namespace IntegracionWebService
         [WebMethod]
         public Cliente ObtenerCliente(string nombre, string apellido)
         {
-            if (estaCoreAbajo)
+            if (nombre.Length <= 50 && apellido.Length <= 50)
             {
-                if (nombre.Length <= 50 && apellido.Length <= 50)
-                    return Cliente.ObtenerCliente(nombre, apellido);
+                if (estaCoreAbajo)
+                {
+                    Cliente clienteEncontrado = Cliente.ObtenerCliente(nombre, apellido);
+                    log.Info(string.Format("Se llamo el web service ObtenerCliente con los parametros: {0} {1} y se " +
+                        "retorno un cliente con la informacion: {2}", nombre, apellido, clienteEncontrado));
+                    return clienteEncontrado;
+                }
                 else
-                    throw new ArgumentException("Uno de los argumentos es demasiado largo. " +
-                        "El nombre y el apellido no pueden tener un largo de mas de 50");
+                {
+                    //TODO.
+                    throw new NotImplementedException();
+                }
             }
             else
             {
-                //TODO.
-                throw new NotImplementedException();
+                var e = new ArgumentException("Uno de los argumentos es demasiado largo. " +
+                    "El nombre y el apellido no pueden tener un largo de mas de 50");
+                ExceptionLogger.Log(e, log);
+                throw e;
             }
         }
 
-        /// <summary>
-        /// Insertar una nueva cuenta dentro de la database. 
-        /// </summary>
         [WebMethod]
         public void InsertarCuenta(int numeroCuenta, string cedula, string nombres, string apellidos)
         {
-            if (estaCoreAbajo)
+            if (cedula.Length <= 12 && nombres.Length <= 50 && apellidos.Length <= 50)
             {
-                if (cedula.Length <= 12 && nombres.Length <= 50 && apellidos.Length <= 50)
+                if (estaCoreAbajo)
                     Cuenta.InsertarCuenta(numeroCuenta, cedula, nombres, apellidos);
                 else
-                    throw new ArgumentException("Uno de los argumentos es demasiado largo. " +
-                       "El largo de la matricula debe ser menor o igual a 12 y los nombres y apellidos menor o igual a 50");
+                {
+                    //TODO.
+                }
+
+                log.Info(string.Format("Se recibio el numero de cuenta: {0}, la cedula {1}, y el nombre {2}. Se inserto nuevo informacion" +
+                    "en la tabla de cuentas", numeroCuenta, cedula, nombres + " " + apellidos));
             }
             else
             {
-                //TODO.
+                var e = new ArgumentException("Uno de los argumentos es demasiado largo. " +
+                    "El largo de la matricula debe ser menor o igual a 12 y los nombres y apellidos menor o igual a 50");
+                ExceptionLogger.Log(e, log);
+                throw e;
             }
         }
 
@@ -93,9 +111,25 @@ namespace IntegracionWebService
         public Cuenta[] ObtenerCuentas(string cedula)
         {
             if (cedula.Length <= 12)
-                return Cuenta.ObtenerCuentas(cedula);
+            {
+                Cuenta[] cuentas;
+                if (estaCoreAbajo)
+                    cuentas =  Cuenta.ObtenerCuentas(cedula);
+                else
+                {
+                    throw new NotImplementedException();
+                }
+
+                log.Info(string.Format("Se recibio la cedula {0} y se regresaron {1} cuentas", cedula, cuentas.Length));
+
+                return cuentas;
+            }
             else
-                throw new ArgumentException("La cedula no puede tener un largo de más de 12");
+            {
+                var e = new ArgumentException("La cedula no puede tener un largo de más de 12");
+                ExceptionLogger.Log(e, log);
+                throw e;
+            }
         }
 
         /// <summary>
@@ -104,10 +138,16 @@ namespace IntegracionWebService
         [WebMethod]
         public Cuenta ObtenerCuenta(int numeroCuenta)
         {
+            Cuenta cuenta;
             if (estaCoreAbajo)
-                return Cuenta.ObtenerCuenta(numeroCuenta);
+                cuenta = Cuenta.ObtenerCuenta(numeroCuenta);
             else
-                return null;//TODO
+                throw new NotImplementedException();
+
+            log.Info(string.Format("Se recibio el numero de cuenta {0} y se devolvio un objeto con el contenido: {1}",
+                numeroCuenta, cuenta));
+
+            return cuenta;
         }
 
         /// <summary>
@@ -115,7 +155,8 @@ namespace IntegracionWebService
         /// el numero de cuenta en la cual se depositara y el monto
         /// </summary>
         [WebMethod]
-        public void RealizarTransaccion(int numeroCuentaRetiro, int numeroCuentaDeposito, decimal monto, TipoTransaccionesBancarias tipoTransaccion)
+        public void RealizarTransaccion(int numeroCuentaRetiro, int numeroCuentaDeposito, 
+            decimal monto, TipoTransaccionesBancarias tipoTransaccion)
         {
             if (tipoTransaccion == TipoTransaccionesBancarias.Interbancaria)
             {
@@ -128,6 +169,9 @@ namespace IntegracionWebService
                 {
                     //TODO
                 }
+
+                log.Info(string.Format("Se recibieron los numeros de cuentas {0} y {1} para realizar una transaccion interbancaria" + 
+                    "Se hicieron las actualizaciones adecuadas en la database", numeroCuentaRetiro, numeroCuentaDeposito));
             }
         }
 
@@ -148,6 +192,9 @@ namespace IntegracionWebService
             {
                 //TODO
             }
+
+            log.Info(string.Format("Se ha recibido la cuenta: {0} y el monto {1}. Se le añadio {1}" +
+                " a la cuenta {2} y se regreso un objeto de tipo cuenta actualizado", cuenta, monto, cuenta.numeroCuenta));
 
             return cuenta;
         }
@@ -171,9 +218,16 @@ namespace IntegracionWebService
                 {
                     //TODO
                 }
+
+                log.Info(string.Format("Se recibio la cuenta: {0} y el monto: {1}. Se modifico el monto actual de la cuenta {2} de manera acorde",
+                    cuenta, monto, cuenta.numeroCuenta));
             }
             else
-                throw new ArgumentException("La cuenta no tiene balance suficiente disponible para realizar esta transaccion");
+            {
+                var e = new ArgumentException("La cuenta no tiene balance suficiente disponible para realizar esta transaccion");
+                ExceptionLogger.Log(e, log);
+                throw e;
+            }
 
             return cuenta;
         }
@@ -212,6 +266,9 @@ namespace IntegracionWebService
                 //TODO
             }
 
+            log.Info(string.Format("Se recibieron los parametros: {0} {1} {2} y se hicieron las modificaciones acordes en la database",
+                cuenta, prestamo, monto));
+
             return cuenta;
         }
 
@@ -230,6 +287,9 @@ namespace IntegracionWebService
                 //TODO
             }
 
+            log.Info(string.Format("Se recibio la fecha: {0}. Se regresaron {1} transacciones existentes en la database",
+                fecha, transacciones.Length));
+
             return transacciones;
         }
 
@@ -246,6 +306,9 @@ namespace IntegracionWebService
             {
                 //Todo
             }
+
+            log.Info(string.Format("Se recibieron los parametros: {0} y {1}. Se regresaron {2} transacciones existentes en la database",
+                fechaComienzo, fechaFinal, transacciones.Length));
 
             return transacciones;
         }

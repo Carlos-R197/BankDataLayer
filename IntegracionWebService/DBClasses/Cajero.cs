@@ -25,13 +25,13 @@ namespace Integracion.DBClasses
 
             public static Cajero ObtenerCajero(string usuario, string contraseña)
             {
-                var data = new StoredProcedureData()
+                var storedProcedure = new LeerStoredProcedure()
                 {
                     nombre = "ConsultarCajero",
                     nombresParametros = new string[] { "@Usuario", "@Contraseña" },
                     valoresParametros = new object[] { usuario, contraseña }
                 };
-                DataRow cajeroTablaRow = SqlWrapper.EjecutaLeerUnoStoredProcedure(data);
+                DataRow cajeroTablaRow = storedProcedure.Ejecutar();
                 if (cajeroTablaRow != null)
                     return Cajero.ArmarCajero(cajeroTablaRow);
                 else

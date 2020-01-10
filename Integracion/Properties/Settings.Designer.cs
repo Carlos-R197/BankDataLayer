@@ -22,5 +22,15 @@ namespace Integracion.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://integracionwebservice201912344.azurewebsites.net/WebService.asmx")]
+        public string Integracion_net_azurewebsites_integracionwebservice201912344_WebService {
+            get {
+                return ((string)(this["Integracion_net_azurewebsites_integracionwebservice201912344_WebService"]));
+            }
+        }
     }
 }

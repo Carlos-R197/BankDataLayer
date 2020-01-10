@@ -9,26 +9,36 @@ namespace Integracion.DBClasses
         public string nombres;
         public string apellidos;
 
-        public static void InsertarCliente(string matricula, string nombres, string apellidos)
+        public override string ToString()
         {
-            var data = new StoredProcedureData()
+            return string.Format("Matricula: {0} Nombres: {1}, Apellidos: {2}", matricula, nombres, apellidos);
+        }
+
+        public bool EsValido()
+        {
+            return matricula.Length <= 12 && nombres.Length <= 50 && apellidos.Length <= 50;
+        }
+
+        public static void InsertarCliente(Cliente cliente)
+        {
+            var storedProcedure = new ModificarStoredProcedure()
             {
                 nombre = "InsertarCliente",
                 nombresParametros = new string[] { "@Cedula", "@Nombres", "@Apellidos" },
-                valoresParametros = new object[] { matricula, nombres, apellidos }
+                valoresParametros = new object[] { cliente.matricula, cliente.nombres, cliente.apellidos }
             };
-            SqlWrapper.EjecutaEscribirStoredProcedure(data);
+            storedProcedure.Ejecutar();
         }
 
         public static Cliente ObtenerCliente(string nombre, string apellido)
         {
-            var data = new StoredProcedureData()
+            var storedProcedure = new LeerStoredProcedure()
             {
                 nombre = "ObtenerCliente",
                 nombresParametros = new string[] { "@Nombres", "@Apellidos" },
                 valoresParametros = new object[] { nombre, apellido }
             };
-            DataRow row = SqlWrapper.EjecutaLeerUnoStoredProcedure(data);
+            DataRow row = storedProcedure.Ejecutar();
             if (row != null)
                 return ArmarCliente(row);
             else

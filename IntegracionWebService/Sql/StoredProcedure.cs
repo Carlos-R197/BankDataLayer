@@ -1,8 +1,8 @@
 ﻿
 namespace Integracion.Sql
 {
-    public class StoredProcedureData
-    {
+    public abstract class StoredProcedure
+    { 
         public string nombre;
         public string[] nombresParametros;
         public object[] valoresParametros;
