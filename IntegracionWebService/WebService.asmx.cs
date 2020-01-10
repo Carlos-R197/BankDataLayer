@@ -155,24 +155,20 @@ namespace IntegracionWebService
         /// el numero de cuenta en la cual se depositara y el monto
         /// </summary>
         [WebMethod]
-        public void RealizarTransaccion(int numeroCuentaRetiro, int numeroCuentaDeposito, 
-            decimal monto, TipoTransaccionesBancarias tipoTransaccion)
+        public void RealizarTransaccion(int numeroCuentaRetiro, int numeroCuentaDeposito, decimal monto)
         {
-            if (tipoTransaccion == TipoTransaccionesBancarias.Interbancaria)
+            if (estaCoreAbajo)
             {
-                if (estaCoreAbajo)
-                {
-                    Cuenta.ActualizarCuenta(numeroCuentaRetiro, -monto, TipoTransaccion.Transaccion);
-                    Cuenta.ActualizarCuenta(numeroCuentaDeposito, monto, TipoTransaccion.Transaccion);
-                }
-                else
-                {
-                    //TODO
-                }
-
-                log.Info(string.Format("Se recibieron los numeros de cuentas {0} y {1} para realizar una transaccion interbancaria" + 
-                    "Se hicieron las actualizaciones adecuadas en la database", numeroCuentaRetiro, numeroCuentaDeposito));
+                Cuenta.ActualizarCuenta(numeroCuentaRetiro, -monto, TipoTransaccion.Transaccion);
+                Cuenta.ActualizarCuenta(numeroCuentaDeposito, monto, TipoTransaccion.Transaccion);
             }
+            else
+            {
+                //TODO
+            }
+
+            log.Info(string.Format("Se recibieron los numeros de cuentas {0} y {1} para realizar una transaccion interbancaria" +
+                "Se hicieron las actualizaciones adecuadas en la database", numeroCuentaRetiro, numeroCuentaDeposito));
         }
 
         /// <summary>
@@ -230,15 +226,6 @@ namespace IntegracionWebService
             }
 
             return cuenta;
-        }
-
-        /// <summary>
-        /// Busca un cajero existente en la database a partir de su usuario y contraseña. Si no existe retorna null
-        /// </summary>
-        [WebMethod]
-        public Cajero ValidarCajero(string usuario, string contraseña)
-        {
-            return Cajero.ObtenerCajero(usuario, contraseña);
         }
 
         /// <summary>
