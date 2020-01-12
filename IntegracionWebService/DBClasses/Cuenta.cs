@@ -23,8 +23,10 @@ namespace Integracion.DBClasses
                 numeroCuenta, clienteCedula, balanceDisponible, nombres, apellidos);
         }
 
-        public static void InsertarCuenta(int numeroCuenta, string clienteCedula, string nombres, string apellidos)
+        public static void InsertarCuenta(string clienteCedula, string nombres, string apellidos)
         {
+            Random random = new Random();
+            int numeroCuenta = random.Next(100000, int.MaxValue);
             var storedProcedure = new ModificarStoredProcedure()
             {
                 nombre = "InsertarCuenta",

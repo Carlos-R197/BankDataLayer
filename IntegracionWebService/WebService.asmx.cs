@@ -85,7 +85,7 @@ namespace IntegracionWebService
             if (cedula.Length <= 12 && nombres.Length <= 50 && apellidos.Length <= 50)
             {
                 if (estaCoreAbajo)
-                    Cuenta.InsertarCuenta(numeroCuenta, cedula, nombres, apellidos);
+                    Cuenta.InsertarCuenta(cedula, nombres, apellidos);
                 else
                 {
                     //TODO.
