@@ -1,3 +1,4 @@
-# Integracion-Banco-2
+# Bank data layer
 
-Integration layer for bank project.
+Web service that exposes a set of methods that give access to 
+the bank's data.
